@@ -7,5 +7,19 @@
 
     <!-- Annotation-based beans -->
     <context:component-scan base-package="de.diedavids.cuba.dataimport"/>
+    <bean id="cubaDataSource_me" class="com.haulmont.cuba.core.sys.CubaDataSourceFactoryBean">
+        <property name="storeName" value="me"/>
+    </bean>
+    <bean id="entityManagerFactory_me" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          lazy-init="false">
+        <property name="persistenceXmlLocation" value="file:${cuba.dataDir}/me-persistence.xml"/>
+        <property name="dataSource" ref="cubaDataSource_me"/>
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+    </bean>
+    <bean id="transactionManager_me" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory_me"/>
+        <property name="dataSource" ref="cubaDataSource_me"/>
+        <qualifier type="org.springframework.beans.factory.annotation.Qualifier" value="me"/>
+    </bean>
 
 </beans>

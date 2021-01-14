@@ -36,6 +36,7 @@ def globalModule = project(":${modulePrefix}-global")
 def coreModule = project(":${modulePrefix}-core")
 def guiModule = project(":${modulePrefix}-gui")
 def webModule = project(":${modulePrefix}-web")
+def webToolkitModule = project(":${modulePrefix}-web-toolkit")
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
@@ -97,10 +98,13 @@ subprojects {
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     appComponent('de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.10.0')
+    appComponent('com.haulmont.addon.restapi:restapi-global:7.2.2')
+    appComponent("com.haulmont.reports:reports-global:$cubaVersion")
+    appComponent("com.haulmont.charts:charts-global:$cubaVersion")
 
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.4.1'
+def postgres = 'org.postgresql:postgresql:42.2.9'
 
 
 allprojects {
@@ -133,7 +137,7 @@ test.finalizedBy(project.tasks.cobertura)
 test.finalizedBy(project.tasks.coberturaCheck)
 
 
-configure([globalModule, coreModule, guiModule, webModule]) {
+configure([globalModule, coreModule, guiModule, webModule, webToolkitModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
     apply(plugin: 'cuba')
@@ -260,10 +264,11 @@ configure(coreModule) {
     dependencies {
         compile(globalModule)
         compileOnly(servletApi)
-        jdbc(hsql)
-        testRuntime(hsql)
+        jdbc(postgres)
+        testRuntime(postgres)
         compile('org.apache.poi:poi-ooxml:4.1.1')
 
+        jdbc('org.postgresql:postgresql:42.2.9')
     }
 
     task cleanConf(description: 'Cleans up conf directory', type: Delete) {
@@ -298,19 +303,19 @@ configure(coreModule) {
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
-        dbName = 'ddcdi4'
-        dbms = 'hsql'
+        dbName = 'me'
+        dbms = 'postgres'
         host = 'localhost'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbUser = 'me'
+        dbPassword = 'me'
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
-        dbName = 'ddcdi4'
-        dbms = 'hsql'
+        dbName = 'me'
+        dbms = 'postgres'
         host = 'localhost'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbUser = 'me'
+        dbPassword = 'me'
     }
 
 
@@ -350,6 +355,14 @@ configure(webModule) {
 
     }
 
+    jar {
+        with copySpec {
+            from sourceSets.main.allJava
+            include "de/diedavids/cuba/dataimport/web/toolkit/ui/client/**"
+        }
+    }
+
+
     task webArchive(type: Zip) {
         from file("$buildDir/web")
         from file('web')
@@ -381,6 +394,38 @@ configure(webModule) {
     }
 }
 
+configure(webToolkitModule) {
+    dependencies {
+        compile(webModule)
+    }
+
+    jar {
+        from sourceSets.main.allJava
+    }
+
+    task buildWidgetSet(type: CubaWidgetSetBuilding) {
+        widgetSetClass = 'de.diedavids.cuba.dataimport.web.toolkit.ui.AppWidgetSet'
+    }
+
+    task debugWidgetSet(type: CubaWidgetSetDebug) {
+        widgetSetClass = 'de.diedavids.cuba.dataimport.web.toolkit.ui.AppWidgetSet'
+    }
+
+    task webArchive(dependsOn: buildWidgetSet, type: Jar) {
+        from file("$buildDir/web")
+        classifier = 'client'
+    }
+
+    artifacts {
+        archives webArchive
+    }
+
+    task deploy(dependsOn: webArchive, type: Copy) {
+        from webArchive
+        into "$cuba.tomcat.dir/webapps/${modulePrefix}/WEB-INF/lib"
+    }
+}
+
 
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")
@@ -388,7 +433,7 @@ task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}")
 }
 
-task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy"], description: 'Redeploys applications and restarts local Tomcat') {
+task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy", ":${modulePrefix}-web-toolkit:deploy"], description: 'Redeploys applications and restarts local Tomcat') {
     doLast {
         ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
             not {

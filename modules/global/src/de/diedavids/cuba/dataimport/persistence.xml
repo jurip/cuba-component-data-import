@@ -9,5 +9,7 @@
         <class>de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper</class>
         <class>de.diedavids.cuba.dataimport.entity.UniqueConfigurationAttribute</class>
         <class>de.diedavids.cuba.dataimport.entity.UniqueConfiguration</class>
+        <class>de.diedavids.cuba.dataimport.entity.Operation</class>
+        <class>de.diedavids.cuba.dataimport.entity.CounterAgent</class>
     </persistence-unit>
 </persistence>

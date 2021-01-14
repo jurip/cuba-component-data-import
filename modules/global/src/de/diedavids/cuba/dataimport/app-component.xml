@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
-               dependsOn="de.balvi.cuba.declarativecontrollers, com.haulmont.cuba">
+               dependsOn="de.balvi.cuba.declarativecontrollers, com.haulmont.reports, com.haulmont.charts, com.haulmont.cuba, com.haulmont.addon.restapi">
     <module blocks="*"
             name="global">
         <artifact appJar="true"
@@ -12,6 +12,8 @@
                   value="+de/diedavids/cuba/dataimport/metadata.xml"/>
         <property name="cuba.viewsConfig"
                   value="+de/diedavids/cuba/dataimport/views.xml"/>
+        <property name="cuba.persistenceConfig_me" value="de/diedavids/cuba/dataimport/me-persistence.xml"/>
+        <property name="cuba.additionalStores" value="me"/>
     </module>
     <module blocks="core"
             dependsOn="global"
@@ -42,6 +44,8 @@
                   configuration="webcontent"
                   ext="zip"
                   name="dataimport-web"/>
+        <artifact name="dataimport-web-toolkit" classifier="web" ext="zip" configuration="webcontent"
+                  skipIfExists="web-toolkit"/>
         <property name="cuba.springContextConfig"
                   value="+de/diedavids/cuba/dataimport/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
@@ -54,5 +58,9 @@
                   value="+de/diedavids/cuba/dataimport/web-permissions.xml"/>
         <property name="cuba.mainMessagePack"
                   value="+de.diedavids.cuba.dataimport.web"/>
+        <property name="cuba.web.widgetSet" value="de.diedavids.cuba.dataimport.web.toolkit.ui.AppWidgetSet"/>
+    </module>
+    <module name="web-toolkit" dependsOn="web">
+        <artifact name="dataimport-web-toolkit"/>
     </module>
 </app-component>

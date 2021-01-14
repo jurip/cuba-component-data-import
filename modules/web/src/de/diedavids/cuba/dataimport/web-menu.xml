@@ -6,5 +6,6 @@
         <item openType="DIALOG"
               screen="ddcdi$import-wizard"/>
         <item screen="ddcdi$ImportExecution.browse"/>
+        <item screen="ddcdi_Operation.browse" caption="mainMsg://menu_config.ddcdi_Operation.browse"/>
     </menu>
 </menu-config>

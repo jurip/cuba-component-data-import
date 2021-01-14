@@ -1,6 +1,0 @@
-{
-  "name": "cuba-component-data-import-generation",
-  "devDependencies": {
-    "@cuba-platform/front-generator": "^3.0.0"
-  }
-}

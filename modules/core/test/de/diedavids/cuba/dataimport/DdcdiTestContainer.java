@@ -10,15 +10,12 @@ public class DdcdiTestContainer extends TestContainer {
 
     public DdcdiTestContainer() {
         super();
-        appComponents = new ArrayList<>(Arrays.asList(
-                "com.haulmont.cuba"
-                // add CUBA premium add-ons here
-                // "com.haulmont.bpm",
-                // "com.haulmont.charts",
-                // "com.haulmont.fts",
-                // "com.haulmont.reports",
-                // and custom app components if any
-        ));
+        appComponents = Arrays.asList(
+                "com.haulmont.cuba",
+                "de.balvi.cuba.declarativecontrollers",
+                "com.haulmont.addon.restapi",
+                "com.haulmont.reports",
+                "com.haulmont.charts");
         appPropertiesFiles = Arrays.asList(
                 // List the files defined in your web.xml
                 // in appPropertiesConfig context parameter of the core module

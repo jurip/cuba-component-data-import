@@ -9,6 +9,7 @@ class DataConverterFactory {
     ImportDataConverter createTableDataConverter(FileDescriptor fileDescriptor) {
         switch (fileDescriptor.extension) {
             case 'xlsx': return new ExcelImportDataConverter()
+            case 'xls': return new ExcelImportDataConverter()
             case 'csv': return new CsvImportDataConverter()
             case 'json': return new JsonImportDataConverter()
             case 'xml': return new XmlImportDataConverter()

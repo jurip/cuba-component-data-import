@@ -28,6 +28,7 @@
                     <textField id="accountNumberField" property="accountNumber"/>
                     <dateField id="dateField" property="date"/>
                     <textField id="docNumberField" property="docNumber"/>
+                    <dateField id="operationDateField" property="operationDate"/>
                 </column>
             </form>
         </scrollBox>

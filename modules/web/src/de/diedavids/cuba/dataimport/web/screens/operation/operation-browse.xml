@@ -45,6 +45,7 @@
                 <column id="accountNumber"/>
                 <column id="date"/>
                 <column id="docNumber"/>
+                <column id="operationDate"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
