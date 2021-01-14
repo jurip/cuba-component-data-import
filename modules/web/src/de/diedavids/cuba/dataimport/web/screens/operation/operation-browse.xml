@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://operationBrowse.caption"
+        focusComponent="operationsTable"
+        messagesPack="de.diedavids.cuba.dataimport.web.screens.operation">
+    <data readOnly="true">
+        <collection id="operationsDc"
+                    class="de.diedavids.cuba.dataimport.entity.Operation">
+            <view extends="_local"/>
+            <loader id="operationsDl">
+                <query>
+                    <![CDATA[select e from ddcdi_Operation e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="operationsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="operationsTable"
+                dataLoader="operationsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="operationsTable"
+                    width="100%"
+                    dataContainer="operationsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="purposeOfPayment"/>
+                <column id="income"/>
+                <column id="outcome"/>
+                <column id="counterAgentAccountNumber"/>
+                <column id="counterAgentBankName"/>
+                <column id="counterAgentBankCorrAccount"/>
+                <column id="counterAgentBankBIK"/>
+                <column id="counterAgentINN"/>
+                <column id="counterAgent"/>
+                <column id="accountNumber"/>
+                <column id="date"/>
+                <column id="docNumber"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="operationsTable.create"/>
+                <button id="editBtn" action="operationsTable.edit"/>
+                <button id="removeBtn" action="operationsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
