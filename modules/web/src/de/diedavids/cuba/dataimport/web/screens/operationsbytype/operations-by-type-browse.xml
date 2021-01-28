@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://operationsByTypeBrowse.caption"
+        focusComponent="operationsByTypesTable"
+        messagesPack="de.diedavids.cuba.dataimport.web.screens.operationsbytype">
+    <data readOnly="true">
+        <collection id="operationsByTypesDc"
+                    class="de.diedavids.cuba.dataimport.entity.OperationsByType">
+            <view extends="_local"/>
+            <loader id="operationsByTypesDl">
+                <query>
+                    <![CDATA[select e from ddcdi_OperationsByType e]]>
+                    <condition>
+                        <c:jpql>
+                            <c:where>e.accountNumber = :accountNumber</c:where>
+                        </c:jpql>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="operationsByTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="operationsByTypesTable"
+                dataLoader="operationsByTypesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="operationsByTypesTable"
+                    width="100%"
+                    dataContainer="operationsByTypesDc"
+                    multiselect="true">
+            <actions>
+            </actions>
+            <columns>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

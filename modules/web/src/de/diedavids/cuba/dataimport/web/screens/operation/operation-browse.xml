@@ -11,6 +11,11 @@
             <loader id="operationsDl">
                 <query>
                     <![CDATA[select e from ddcdi_Operation e]]>
+                    <condition>
+                        <c:jpql>
+                            <c:where>e.accountNumber = :accountNumber</c:where>
+                        </c:jpql>
+                    </condition>
                 </query>
             </loader>
         </collection>
@@ -34,6 +39,7 @@
             </actions>
             <columns>
                 <column id="purposeOfPayment"/>
+                <column id="type"/>
                 <column id="income"/>
                 <column id="outcome"/>
                 <column id="counterAgentAccountNumber"/>

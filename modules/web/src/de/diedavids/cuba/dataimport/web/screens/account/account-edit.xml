@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://accountEdit.caption"
+        focusComponent="form"
+        messagesPack="de.diedavids.cuba.dataimport.web.screens.account">
+    <data>
+        <instance id="accountDc"
+                  class="de.diedavids.cuba.dataimport.entity.Account">
+            <view extends="_local"/>
+            <loader/>
+        </instance>
+
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+
+        <form id="form" dataContainer="accountDc">
+            <column width="350px">
+                <textField id="companyField" property="company"/>
+                <textField id="nameField" property="name"/>
+                <textField id="accountNumberField" property="accountNumber"/>
+                <textField id="bankField" property="bank"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

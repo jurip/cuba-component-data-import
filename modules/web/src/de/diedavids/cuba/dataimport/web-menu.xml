@@ -7,5 +7,8 @@
               screen="ddcdi$import-wizard"/>
         <item screen="ddcdi$ImportExecution.browse"/>
         <item screen="ddcdi_Operation.browse" caption="mainMsg://menu_config.ddcdi_Operation.browse"/>
+        <item screen="ddcdi_Account.browse" caption="mainMsg://menu_config.ddcdi_Account.browse"/>
+        <item screen="ddcdi_NewEntity.browse" caption="mainMsg://menu_config.ddcdi_NewEntity.browse"/>
+        <item screen="ddcdi_OperationsByType.browse" caption="mainMsg://menu_config.ddcdi_OperationsByType.browse"/>
     </menu>
 </menu-config>
