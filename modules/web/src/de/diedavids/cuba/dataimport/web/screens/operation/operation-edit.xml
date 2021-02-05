@@ -6,9 +6,18 @@
     <data>
         <instance id="operationDc"
                   class="de.diedavids.cuba.dataimport.entity.Operation">
-            <view extends="_local"/>
+            <view extends="_local">
+                <property name="operationType" view="_minimal"/>
+            </view>
             <loader/>
         </instance>
+        <collection id="operationTypesDc" class="de.diedavids.cuba.dataimport.entity.OperationType" view="_minimal">
+            <loader id="operationTypesDl">
+                <query>
+                    <![CDATA[select e from ddcdi_OperationType e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -16,20 +25,38 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="operationDc">
                 <column width="350px">
+                    <lookupPickerField id="operationTypeField" optionsContainer="operationTypesDc"
+                                       property="operationType">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="open" type="picker_open"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </lookupPickerField>
                     <textField id="purposeOfPaymentField" property="purposeOfPayment"/>
-                    <textField id="typeField" property="type"/>
                     <textField id="incomeField" property="income"/>
+                    <textField id="bankField" property="bank"/>
+                    <textField id="incomegField" property="incomeg"/>
+                    <textField id="nrField" property="nr"/>
+                    <textField id="nrgField" property="nrg"/>
+                    <textField id="typeField" property="type"/>
                     <textField id="outcomeField" property="outcome"/>
                     <textField id="counterAgentAccountNumberField" property="counterAgentAccountNumber"/>
                     <textField id="counterAgentBankNameField" property="counterAgentBankName"/>
                     <textField id="counterAgentBankCorrAccountField" property="counterAgentBankCorrAccount"/>
+                    <textField id="outcomegField" property="outcomeg"/>
                     <textField id="counterAgentBankBIKField" property="counterAgentBankBIK"/>
+                    <dateField id="operationDateField" property="operationDate"/>
                     <textField id="counterAgentINNField" property="counterAgentINN"/>
                     <textField id="counterAgentField" property="counterAgent"/>
                     <textField id="accountNumberField" property="accountNumber"/>
                     <dateField id="dateField" property="date"/>
+                    <textField id="docDateTextField" property="docDateText"/>
+                    <textField id="operationDateTextField" property="operationDateText"/>
                     <textField id="docNumberField" property="docNumber"/>
-                    <dateField id="operationDateField" property="operationDate"/>
+                    <textField id="ostatokField" property="ostatok"/>
+                    <textField id="ostatokTextField" property="ostatokText"/>
+                    <textField id="ostatokDateTextField" property="ostatokDateText"/>
                 </column>
             </form>
         </scrollBox>
