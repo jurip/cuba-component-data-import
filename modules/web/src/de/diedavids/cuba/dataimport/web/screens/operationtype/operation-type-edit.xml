@@ -9,6 +9,13 @@
             <view extends="_local"/>
             <loader/>
         </instance>
+        <collection id="typesDc" class="de.diedavids.cuba.dataimport.entity.OperationType" view="_minimal">
+            <loader id="typessDl">
+                <query>
+                    <![CDATA[select e from ddcdi_OperationType e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>

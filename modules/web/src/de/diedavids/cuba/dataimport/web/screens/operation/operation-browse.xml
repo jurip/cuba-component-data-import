@@ -13,6 +13,11 @@
             <loader id="operationsDl">
                 <query>
                     <![CDATA[select e from ddcdi_Operation e]]>
+                    <condition>
+                        <c:jpql>
+                            <c:where>e.accountNumber = :accountNumber</c:where>
+                        </c:jpql>
+                    </condition>
                 </query>
             </loader>
         </collection>
@@ -35,31 +40,22 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
+                <column id="accountNumber"/>
                 <column id="operationType"/>
-                <column id="purposeOfPayment"/>
-                <column id="income"/>
-                <column id="bank"/>
-                <column id="incomeg"/>
-                <column id="nr"/>
-                <column id="nrg"/>
-                <column id="type"/>
-                <column id="outcome"/>
                 <column id="counterAgentAccountNumber"/>
+                <column id="incomeg"/>
+                <column id="outcomeg"/>
+                <column id="operationDate"/>
+                <column id="ostatok"/>
+                <column id="purposeOfPayment"/>
+                <column id="bank"/>
+                <column id="nrg"/>
+                <column id="counterAgent"/>
                 <column id="counterAgentBankName"/>
                 <column id="counterAgentBankCorrAccount"/>
-                <column id="outcomeg"/>
                 <column id="counterAgentBankBIK"/>
-                <column id="operationDate"/>
                 <column id="counterAgentINN"/>
-                <column id="counterAgent"/>
-                <column id="accountNumber"/>
-                <column id="date"/>
-                <column id="docDateText"/>
-                <column id="operationDateText"/>
-                <column id="docNumber"/>
-                <column id="ostatok"/>
-                <column id="ostatokText"/>
-                <column id="ostatokDateText"/>
+
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

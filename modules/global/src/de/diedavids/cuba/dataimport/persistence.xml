@@ -14,5 +14,6 @@
         <class>de.diedavids.cuba.dataimport.entity.Account</class>
         <class>de.diedavids.cuba.dataimport.entity.NewEntity</class>
         <class>de.diedavids.cuba.dataimport.entity.OperationsByType</class>
+        <class>de.diedavids.cuba.dataimport.entity.OperationType</class>
     </persistence-unit>
 </persistence>

@@ -88,3 +88,145 @@ create view месячный_отчет as SELECT o.bank as БАНК,
           where o.yyyy != -1
           
           ;
+
+
+
+CREATE OR REPLACE VIEW public.operation_by_year_account
+AS SELECT
+    date_part('year'::text, operation.op_date) AS yyyy,
+    sum(operation.income) AS income,
+    sum(operation.outcome) AS outcome,
+    operation.account_number
+   FROM operation
+  GROUP BY operation.account_number, (date_part('year'::text, operation.op_date))
+  ORDER BY operation.account_number;
+
+
+
+  CREATE OR REPLACE VIEW public.годовой_отчет_общий
+  AS SELECT
+      o.yyyy AS "ГОД",
+      p.income AS "ЗАЧИСЛЕНИЯ",
+      p.outcome AS "СПИСАНИЯ",
+      p.balanc AS "БАЛАНС",
+      o.ostatok AS "конечный_остаток",
+      o.ostatok - p.balanc AS "начальный_остаток",
+      o.account_number as "счет",
+      da.bank ,
+      da.company ,
+      da."name" as "naimenovanie"
+     FROM ( SELECT DISTINCT ON (date_part('year'::text, do2.operation_date), do2.account_number)
+              date_part('year'::text, do2.operation_date) AS yyyy,
+              do2.ostatok,
+              do2.nrg,
+              do2.account_number
+             FROM ddcdi_operation do2
+            ORDER BY (date_part('year'::text, do2.operation_date)), do2.account_number, do2.nrg DESC) o
+       JOIN ( SELECT
+              date_part('year'::text, do3.operation_date) AS y,
+              sum(do3.incomeg - do3.outcomeg) AS balanc,
+              sum(do3.incomeg) AS income,
+              sum(do3.outcomeg) AS outcome,
+              do3.account_number  as account_number
+             FROM ddcdi_operation do3
+            GROUP BY (date_part('year'::text, do3.operation_date), do3.account_number)
+            ORDER BY (date_part('year'::text, do3.operation_date))) p ON o.yyyy = p.y and o.account_number = p.account_number
+            left outer join ddcdi_account da on p.account_number = da.account_number
+
+            WHERE o.yyyy <> '-1'::integer::double precision
+
+
+
+
+
+
+    ;
+
+
+
+    drop view годовой_отчет_общий;
+    CREATE OR REPLACE VIEW public.годовой_отчет_общий
+    AS SELECT
+        o.yyyy AS "ГОД",
+        p.income AS "ЗАЧИСЛЕНИЯ",
+        p.outcome AS "СПИСАНИЯ",
+        p.balanc AS "БАЛАНС",
+        o.ostatok AS "конечный_остаток",
+        o.ostatok - p.balanc AS "начальный_остаток",
+        o.account_number AS "СЧЕТ",
+        da.bank,
+        da.company,
+        da.name AS naimenovanie,
+        md5(random()::text || clock_timestamp()::text)::uuid as id,
+        null as delete_ts,
+        null as deleted_by,
+        null as version
+       FROM ( SELECT DISTINCT ON ((date_part('year'::text, do2.operation_date)), do2.account_number) date_part('year'::text, do2.operation_date) AS yyyy,
+                do2.ostatok,
+                do2.nrg,
+                do2.account_number
+               FROM ddcdi_operation do2
+              ORDER BY (date_part('year'::text, do2.operation_date)), do2.account_number, do2.nrg DESC) o
+         JOIN ( SELECT date_part('year'::text, do3.operation_date) AS y,
+                sum(do3.incomeg - do3.outcomeg) AS balanc,
+                sum(do3.incomeg) AS income,
+                sum(do3.outcomeg) AS outcome,
+                do3.account_number
+               FROM ddcdi_operation do3
+              GROUP BY (date_part('year'::text, do3.operation_date)), do3.account_number
+              ORDER BY (date_part('year'::text, do3.operation_date))) p ON o.yyyy = p.y AND o.account_number::text = p.account_number::text
+         LEFT JOIN ddcdi_account da ON p.account_number::text = da.account_number::text;
+
+
+
+
+         CREATE FUNCTION emp_stamp() RETURNS trigger AS $emp_stamp$
+             BEGIN
+                 -- Проверить, что указаны имя сотрудника и зарплата
+                 IF NEW.operation_date_text IS not NULL THEN
+                     new.operation_date = dt_or_null(new.operation_date_text,'dd.mm.yyyy');
+                 END IF;
+                RETURN NEW;
+             END;
+         $emp_stamp$ LANGUAGE plpgsql;
+
+         CREATE TRIGGER emp_stamp BEFORE INSERT OR UPDATE ON ddcdi_operation
+             FOR EACH ROW EXECUTE PROCEDURE emp_stamp();
+
+
+             drop trigger emp_stamp on ddcdi_operation;
+             drop function emp_stamp;
+             CREATE FUNCTION emp_stamp() RETURNS trigger AS $emp_stamp$
+                          BEGIN
+                              -- Проверить, что указаны имя сотрудника и зарплата
+                              IF NEW.operation_date_text IS not NULL THEN
+                                  new.operation_date = dt_or_null(new.operation_date_text,'dd.mm.yyyy');
+                              END IF;
+                             RETURN NEW;
+                          END;
+                      $emp_stamp$ LANGUAGE plpgsql;
+
+
+
+
+
+
+
+
+
+
+                      create or replace function dt_or_null (s text, fmt text)
+
+                      returns date
+                      as
+                      $$
+                      begin
+
+                      return to_date(s, fmt);
+
+                      exception
+                      when others then return null;
+
+                      end;
+
+                      $$ language plpgsql;

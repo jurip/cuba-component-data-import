@@ -2,16 +2,20 @@ package de.diedavids.cuba.dataimport.entity;
 
 import com.haulmont.chile.core.annotations.NumberFormat;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.Lookup;
+import com.haulmont.cuba.core.entity.annotation.LookupType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Table(name = "DDCDI_OPERATION")
 @Entity(name = "ddcdi_Operation")
 public class Operation extends StandardEntity {
+    @JoinColumn(name = "OPERATION_TYPE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
+    private OperationType operationType;
     @Column(name = "PURPOSE_OF_PAYMENT")
     private String purposeOfPayment;
     @Column(name = "INCOME")
@@ -61,6 +65,14 @@ public class Operation extends StandardEntity {
     @Column(name = "OSTATOK_DATE_TEXT")
     private String ostatokDateText;
     private static final long serialVersionUID = 6497785863344811442L;
+
+    public OperationType getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(OperationType operationType) {
+        this.operationType = operationType;
+    }
 
     public Integer getNrg() {
         return nrg;

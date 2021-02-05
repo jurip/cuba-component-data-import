@@ -20,6 +20,16 @@ public class OperationsByType extends StandardEntity {
     private String type;
     @Column(name = "INCOME")
     private String income;
+    @Column(name = "OUTCOME")
+    private String outcome;
+
+    public String getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(String outcome) {
+        this.outcome = outcome;
+    }
 
     public String getIncome() {
         return income;

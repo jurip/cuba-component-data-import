@@ -6,18 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Table(name = "годовой_отчет")
+@Table(name = "отчет_общий")
 @Entity(name = "ddcdi_NewEntity")
 public class NewEntity extends StandardEntity {
     private static final long serialVersionUID = 6704305483393063857L;
     @Column(name = "СЧЕТ")
     private String accountNumber;
-    @Column(name = "ГОД")
-    private String year;
 
-    @Column(name = "КОМПАНИЯ")
+    @Column(name = "company")
     private String company;
-    @Column(name = "Наименование")
+    @Column(name = "naimenovanie")
     private String name;
     @Column(name = "ЗАЧИСЛЕНИЯ")
     private String income;
@@ -30,7 +28,7 @@ public class NewEntity extends StandardEntity {
     private String konechnyjOstatok;
     @Column(name = "начальный_остаток")
     private String nachalnyjOstatok;
-    @Column(name = "БАНК")
+    @Column(name = "bank")
     private String bank;
 
     public static long getSerialVersionUID() {
@@ -100,14 +98,6 @@ public class NewEntity extends StandardEntity {
 
     public void setIncome(String income) {
         this.income = income;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
     }
 
     public String getAccountNumber() {
